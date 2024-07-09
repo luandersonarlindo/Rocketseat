@@ -9,17 +9,36 @@
 </head>
 
 <body>
-    <h1>Atividades</h1>
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/locale/pt-br.js"></script>
+    <script>dayjs.locale('pt-br')</script>
 
-    <section>
-        <!--
+    <form onsubmit="salvarAtividade(event)">
+
         <div>
-            <input type="checkbox" name="" id="">
-            <span>Academia em grupo</span>
-            <time>Sábado, 18 de abril às 08:00h</time>
+            <input type="text" placeholder="Qual a atividade?" name="atividade" required>
         </div>
-        -->
-    </section>
+
+        <div>
+            <select name="dia">
+                <option value="2024-03-01">01 de feveiro</option>
+            </select>
+        </div>
+
+        <div>
+            <select name="hora">
+                <option value="10:00">10:00</option>
+            </select>
+        </div>
+
+        <button>Salvar atividade</button>
+
+    </form>
+
+    <main>
+        <h1>Atividades</h1>
+        <section></section>
+    </main>
 
     <script src="script/script.js"></script>
 </body>
