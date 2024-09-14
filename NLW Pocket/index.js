@@ -1,48 +1,107 @@
-// olá, mundo!
-console.log("olá, mundo!")
+const { select, input, checkbox } = require('@inquirer/prompts')
 
-
-// variáveis - let
-let mensagens = "olá, mundo!"
-
-
-// variáveis - const
-const mensagem = "olá, eu"
-{
-    const mensagem = "olá, Mayk!"
-    console.log(mensagem)
-}
-console.log(mensagem);
-
-
-// arrays
-let metas = ['mayk', 'alô']
-let metas01 = [2, 'mayk']
-// concatenando valores
-console.log(metas[1] + ", " + metas[0]) 
-
-let metas02 = [
-    metas,
-    {
-        value: 'caminhar 20 minutos todos os dias',
-        checked: false
-    }
-]
-console.log(metas02[1].value);
-
-// objetos
 let meta = {
-    value: 'ler um livro por mês',
-    address: 2,
-    checked: true,
-    isChecked: () => {
-        console.log(info)
+    value: 'Tomar 3L de água por dia',
+    checked: false,
+}
+
+let metas = [meta]
+
+const cadastrarMeta = async () => {
+    const meta = await input({ message: "Digite a meta: " })
+    if (meta.length == 0) {
+        console.log('A meta não pode ser vazia.')
+        return
+    }
+
+    metas.push({ value: meta, checked: false })
+}
+
+const listarMetas = async () => {
+    const respostas = await checkbox({
+        message: "Use as Setas para mudar de meta, Espaço para marcar ou desmarcar e o Enter para finalizar essa essa etapa",
+        choices: [...metas],
+        instructions: false,
+    })
+
+    if (respostas.length == 0) {
+        console.log("Nenhuma meta selecionada!")
+        return
+    }
+
+    metas.forEach((m) => {
+        m.checked = false
+    })
+
+    respostas.forEach((resposta) => {
+        const meta = metas.find((m) => {
+            return m.value == resposta
+        })
+
+        meta.checked = true
+
+    })
+
+    console.log("Meta(s) marcadas como concluída(s)")
+}
+
+const metasRealizadas = async () => {
+    const realizadas = metas.filter((meta) => {
+        return meta.checked
+    })
+    
+    if(realizadas.length == 0){
+        console.log('Não existem metas realizadas!')
+        return
+    }
+
+    await select({
+        message: "Metas realizadas",
+        choices: [...realizadas]
+    })
+}
+
+const start = async () => {
+    while (true) {
+
+        const opcao = await select({
+            message: "Menu >",
+            choices: [
+                {
+                    name: "Cadastrar meta",
+                    value: "cadastrar"
+                },
+                {
+                    name: "Listar metas",
+                    value: "listar"
+                },
+                {
+                    name: "Metas Realizadas",
+                    value: "realizadas"
+                },
+                {
+                    name: "Sair",
+                    value: "sair"
+                }
+            ]
+        })
+
+        switch (opcao) {
+            case "cadastrar":
+                await cadastrarMeta()
+                console.log(metas)
+                break;
+            case "listar":
+                await listarMetas()
+                break;
+            case "realizadas":
+                await metasRealizadas()
+                break;
+            case "sair":
+                console.log("Até a próxima!")
+                return
+        }
     }
 }
-console.log(meta.value);
 
-// function // arrow function
-const criarMeta = () => {}
-
-// named function
-function criarMetas() {}
+start()
