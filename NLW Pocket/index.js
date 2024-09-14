@@ -24,14 +24,14 @@ const listarMetas = async () => {
         instructions: false,
     })
 
+    metas.forEach((m) => {
+        m.checked = false
+    })
+
     if (respostas.length == 0) {
         console.log("Nenhuma meta selecionada!")
         return
     }
-
-    metas.forEach((m) => {
-        m.checked = false
-    })
 
     respostas.forEach((resposta) => {
         const meta = metas.find((m) => {
@@ -49,8 +49,8 @@ const metasRealizadas = async () => {
     const realizadas = metas.filter((meta) => {
         return meta.checked
     })
-    
-    if(realizadas.length == 0){
+
+    if (realizadas.length == 0) {
         console.log('Não existem metas realizadas!')
         return
     }
@@ -58,6 +58,22 @@ const metasRealizadas = async () => {
     await select({
         message: "Metas realizadas",
         choices: [...realizadas]
+    })
+}
+
+const metasAbertas = async () => {
+    const abertas = metas.filter((meta) => {
+        return meta.checked != true
+    })
+
+    if (abertas.length == 0) {
+        console.log("Não existem metas abertas!")
+        return
+    }
+
+    await select({
+        message: "Metas Abertas",
+        choices: [...abertas]
     })
 }
 
@@ -80,6 +96,10 @@ const start = async () => {
                     value: "realizadas"
                 },
                 {
+                    name: "Metas Abertas",
+                    value: "abertas"
+                },
+                {
                     name: "Sair",
                     value: "sair"
                 }
@@ -90,13 +110,16 @@ const start = async () => {
             case "cadastrar":
                 await cadastrarMeta()
                 console.log(metas)
-                break;
+                break
             case "listar":
                 await listarMetas()
-                break;
+                break
             case "realizadas":
                 await metasRealizadas()
-                break;
+                break
+            case "abertas":
+                await metasAbertas()
+                break
             case "sair":
                 console.log("Até a próxima!")
                 return
@@ -105,3 +128,5 @@ const start = async () => {
 }
 
 start()
+
+// aula03 21:40
